@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:aop="http://www.springframework.org/schema/aop" xmlns="http://www.springframework.org/schema/beans"
+   xmlns:context="http://www.springframework.org/schema/context" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:sec="http://www.springframework.org/schema/security"
+   xmlns:tx="http://www.springframework.org/schema/tx"
+   xsi:schemaLocation="
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security-4.2.xsd
+		http://www.springframework.org/schema/tx
+   	 	http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+
+   <mvc:default-servlet-handler />
+
+   <mvc:annotation-driven />
+
+   <mvc:resources location="/resources/" mapping="/resources/**" />
+
+   <context:component-scan base-package="com.diego.*" />
+
+   <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+      <property name="prefix">
+         <value>/WEB-INF/pages/</value>
+      </property>
+      <property name="suffix">
+         <value>.jsp</value>
+      </property>
+   </bean>
+
+   <!-- base de datos -->
+   <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value="org.mariadb.jdbc.Driver" />
+      <property name="url" value="jdbc:mysql://127.0.0.1:3306/dnr_proyecto_daw" />
+      <property name="username" value="root" />
+      <property name="password" value="root" />
+   </bean>
+
+   <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+      <property name="dataSource" ref="dataSource" />
+      <property name="packagesToScan" value="com.diego.modelo" />
+      <property name="hibernateProperties">
+         <props>
+            <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+         </props>
+      </property>
+   </bean>
+
+   <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+      <property name="sessionFactory" ref="sessionFactory" />
+   </bean>
+
+   <!-- Spring -->
+   <tx:annotation-driven transaction-manager="transactionManager" />
+
+   <tx:advice id="txAdvice" transaction-manager="transactionManager">
+      <tx:attributes>
+         <tx:method name="get*" read-only="true" />
+         <tx:method name="find*" read-only="true" />
+         <tx:method name="*" />
+      </tx:attributes>
+   </tx:advice>
+
+   <!-- security -->
+   <aop:config>
+      <aop:pointcut id="userServicePointCut" expression="execution(* com.diego.servicio.usuarios.UsuariosServicioImpl.*(..))" />
+      <aop:advisor advice-ref="txAdvice" pointcut-ref="userServicePointCut" />
+   </aop:config>
+
+   <sec:http auto-config="true" use-expressions="true">
+
+      <!-- Todos -->
+      <sec:intercept-url pattern="/login" access="permitAll" />
+
+      <!-- Solo usuarios -->
+      <sec:intercept-url pattern="/inicio" access="hasAnyRole('USER', 'ADMIN', 'MASTER')" />
+      <sec:intercept-url pattern="/inicio/cambiarDatos" access="hasAnyRole('USER', 'ADMIN', 'MASTER')" />
+      <sec:intercept-url pattern="/inicio/cambiarDatos/DO" access="hasAnyRole('USER', 'ADMIN', 'MASTER')" />
+      <sec:intercept-url pattern="/inicio/cambiarContraseña" access="hasAnyRole('USER', 'ADMIN', 'MASTER')" />
+      <sec:intercept-url pattern="/inicio/cambiarContraseña/DO" access="hasAnyRole('USER', 'ADMIN', 'MASTER')" />
+      <sec:intercept-url pattern="/inicio/misProyectos" access="hasAnyRole('USER', 'ADMIN', 'MASTER')" />
+      <sec:intercept-url pattern="/inicio/misProyectos/*/imputarHoras" access="hasAnyRole('USER', 'ADMIN', 'MASTER')" />
+      <sec:intercept-url pattern="/inicio/misProyectos/*/imputarHoras/DO" access="hasAnyRole('USER', 'ADMIN', 'MASTER')" />
+      <sec:intercept-url pattern="/inicio/horasImputadas" access="hasAnyRole('USER', 'ADMIN', 'MASTER')" />
+
+      <!-- Solo cargos -->
+      <sec:intercept-url pattern="/admin" access="hasAnyRole('ADMIN', 'MASTER')" />
+      <sec:intercept-url pattern="/admin/gestionUsuarios" access="hasAnyRole('ADMIN', 'MASTER')" />
+      <sec:intercept-url pattern="/admin/gestionUsuarios/crearUsuario" access="hasRole('MASTER')" />
+      <sec:intercept-url pattern="/admin/gestionUsuarios/borrarUsuario/master" access="denyAll" />
+      <sec:intercept-url pattern="/admin/gestionUsuarios/borrarUsuario/*" access="hasRole('MASTER')" />
+      <sec:intercept-url pattern="/admin/gestionUsuarios/editarUsuario/master" access="denyAll" />
+      <sec:intercept-url pattern="/admin/gestionUsuarios/editarUsuario/*" access="hasRole('MASTER')" />
+      <sec:intercept-url pattern="/admin/gestionUsuarios/verUsuario/*" access="hasAnyRole('ADMIN', 'MASTER')" />
+      <sec:intercept-url pattern="/admin/gestionProyectos" access="hasAnyRole('ADMIN', 'MASTER')" />
+      <sec:intercept-url pattern="/admin/gestionProyectos/crearProyecto" access="hasRole('MASTER')" />
+      <sec:intercept-url pattern="/admin/gestionProyectos/borrarProyecto/*" access="hasRole('MASTER')" />
+      <sec:intercept-url pattern="/admin/gestionProyectos/editarProyecto/*" access="hasRole('MASTER')" />
+      <sec:intercept-url pattern="/admin/gestionProyectos/asignarProyecto/" access="hasAnyRole('ADMIN', 'MASTER')" />
+      <sec:intercept-url pattern="/admin/gestionProyectos/asignarProyecto/*/DO" access="hasRole('MASTER')" />
+      <sec:intercept-url pattern="/admin/gestionProyectos/asignarProyecto/*/desasignar/*" access="hasRole('MASTER')" />
+      <sec:intercept-url pattern="/admin/gestionHoras" access="hasAnyRole('ADMIN', 'MASTER')" />
+      <sec:intercept-url pattern="/admin/gestionHoras/" access="hasAnyRole('ADMIN', 'MASTER')" />
+      <sec:intercept-url pattern="/admin/gestionHoras/*/alerta" access="hasRole('MASTER')" />
+      <sec:intercept-url pattern="/admin/datosEmpresa" access="hasAnyRole('ADMIN', 'MASTER')" />
+
+      <sec:access-denied-handler error-page="/403error" />
+      <sec:form-login login-page="/login" login-processing-url="/j_spring_security_check"
+         default-target-url="/inicio" authentication-failure-url="/login?error" username-parameter="username"
+         password-parameter="password" />
+      <sec:logout invalidate-session="true" logout-url="/j_spring_security_logout" logout-success-url="/login?logout" />
+      <!-- enable csrf protection -->
+      <sec:csrf />
+   </sec:http>
+
+   <sec:authentication-manager>
+      <sec:authentication-provider user-service-ref="usuariosServicioImpl">
+         <sec:password-encoder hash="plaintext" />
+      </sec:authentication-provider>
+   </sec:authentication-manager>
+
+</beans>

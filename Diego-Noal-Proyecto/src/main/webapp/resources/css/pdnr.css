@@ -1,0 +1,279 @@
+@charset "UTF-8";
+
+html {
+	display: table;
+}
+
+body {
+	display: table-cell;
+}
+
+html, body {
+	color: #555;
+	background-color: #f8f8f8;
+	font-family: sans-serif;
+	font-size: 14px;
+	height: 100%;
+	width: 100%;
+	text-align: center;
+	vertical-align: middle;
+}
+
+/* Bara de navegación */
+#navbar ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #555;
+	position: fixed;
+	top: 0;
+	max-height: 45px;
+	width: 100%;
+}
+
+#navbar li {
+	float: left;
+}
+
+#navbar li a {
+	display: block;
+	color: white;
+	text-align: center;
+	padding: 0px 4px;
+	text-decoration: none;
+}
+
+#navbar li.derecha {
+	float: right;
+}
+
+/* Contenedores generales por tamaño S < M < L */
+#wrapS {
+	width: 389px;
+	margin: 0 auto;
+}
+
+#wrapM {
+	width: 583.5px;
+	margin: 0 auto;
+}
+
+#wrapL {
+	width: 778px;
+	margin: 0 auto;
+}
+
+/* Cabecera contenedor */
+#wheader {
+	height: 60px;
+}
+
+#wheader h1 {
+	color: #555;
+	font-size: 30px;
+	font-weight: 400;
+}
+
+/* Botones de barra de navegacion e interacción dentro de las secciones */
+.submit {
+	border: solid 2px #ff8000;
+	background-color: #ff8000;
+	color: white;
+	text-decoration: none;
+	cursor: pointer;
+	border-radius: 2px;
+	margin: 0 auto;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	text-align: center;
+	width: 90px;
+	height: 35px;
+	line-height: 31px;
+	display: inline-block;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.submit:hover {
+	color: #555;
+}
+
+/* Contenedor del contenido principal del contenedor general */
+#wcontent {
+	min-height: 80px;
+	height: 100%;
+	width: 100%;
+}
+
+#wcontent input[type="text"], [type="password"], select, textarea {
+	width: 100%;
+	min-height: 25px;
+	margin: 4px 0px;
+}
+
+#wcontent textarea {
+	resize: vertical;
+	min-height: 25px;
+	max-height: 200px;
+}
+
+/* Botones de navegación de las secciones Inicio/Admin */
+.navlink {
+	border: solid 2px #ff8000;
+	background-color: #ff8000;
+	color: white;
+	text-decoration: none;
+	cursor: pointer;
+	border-radius: 2px;
+	display: block;
+	margin: 0 auto;
+	text-align: center;
+	width: 162px;
+	height: 25px;
+	line-height: 27px;
+	display: inline-block;
+	font-size: 14px;
+}
+
+.navlink:hover {
+	background-color: #f8f8f8;
+	color: #ff8000;
+}
+
+/* Tablas */
+.divtable {
+	width: 795px;
+}
+
+.divtable table {
+	width: 778px;
+	table-layout: fixed;
+}
+
+.divtable table tr td {
+	border: 1px solid #808080;
+	word-wrap: break-word;
+	text-align: center;
+	font-size: 14px;
+	background-color: white;
+}
+
+.divtable table tr td:hover {
+	background: #f0f0f0;
+}
+
+.hide {
+	width: 0px;
+}
+
+.divtable table.divthead {
+	width: 778px;
+}
+
+.divtable table.divthead tr td {
+	background: #ff8000;
+	color: white;
+	height: 30px;
+}
+
+.divtbody {
+	height: 120px;
+	overflow-y: auto;
+}
+
+/* Barra de busqueda */
+#dbusqueda {
+	text-align: right;
+	max-width: 500px;
+	max-height: 30px;
+	display: inline;
+	max-width: 500px;
+}
+
+button[type=submit] {
+	border: solid 1px #808080;
+	border-radius: 4px;
+	text-decoration: none;
+	background: url("../../resources/img/find.png") 5px 2px no-repeat;
+	background-color: white;
+	color: #000;
+	cursor: pointer;
+	font-weight: bold;
+	width: 90px;
+	height: 30px;
+	text-align: right;
+	margin-right: 2px;
+}
+
+button[type=submit]:hover {
+	border: solid 1px #ff8000;
+	background-color: #ffdbb7;
+}
+
+input[type=search] {
+	padding: 6px;
+	border: solid 1px #808080;
+	border-radius: 4px;
+	text-decoration: none;
+}
+
+/* Imágenes */
+img {
+	border: none;
+}
+
+/* Mensajes de los formularios */
+.error {
+	padding: 15px;
+	margin-top: 5px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	color: #a94442;
+	background-color: #f2dede;
+	border-color: #ebccd1;
+}
+
+.msg {
+	padding: 15px;
+	margin-top: 5px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	color: #31708f;
+	background-color: #d9edf7;
+	border-color: #bce8f1;
+}
+
+/* Pié de página dentro del contenedor general*/
+#wfooter {
+	clear: both;
+}
+
+/* Pié de página */
+#footer {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #555;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	color: white;
+	font-size: 16px;
+	max-height: 45px;
+}
+
+/*
+
+Colores:
+
+#ffcc00 -amarillo
+#660066 -violeta
+#3399ff -azul
+#0099cc -azul 2
+#ff9900 -naranja
+#f8f8f8 -gris
+#666666 -gris 2
+
+*/
